@@ -1,0 +1,57 @@
+.section {
+  padding: 64px 0;
+  border-top: 1px solid var(--line);
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 40px;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 28px;
+  border-left: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.item {
+  position: relative;
+}
+
+.item::before {
+  content: "";
+  position: absolute;
+  left: -33px;
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--signal);
+}
+
+.period {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--slate);
+}
+
+.role {
+  font-size: 1.2rem;
+  margin-top: 4px;
+}
+
+.company {
+  color: var(--signal);
+  font-weight: 500;
+}
+
+.desc {
+  margin-top: 8px;
+  color: var(--slate);
+  max-width: 62ch;
+  font-size: 0.98rem;
+}

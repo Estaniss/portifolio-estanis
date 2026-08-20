@@ -1,0 +1,94 @@
+.section {
+  padding: 64px 0 96px;
+  border-top: 1px solid var(--line);
+}
+
+.title {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  max-width: 18ch;
+}
+
+.emailLink {
+  display: inline-block;
+  margin-top: 22px;
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  color: var(--signal);
+  text-decoration: none;
+  border-bottom: 1px solid var(--signal);
+}
+
+.row {
+  margin-top: 36px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.downloads {
+  margin-top: 14px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.formWrap {
+  margin-top: 56px;
+  max-width: 520px;
+}
+
+.field {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--slate);
+}
+
+.field input,
+.field textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--signal);
+}
+
+.submit {
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  padding: 12px 22px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.submit:hover {
+  background: var(--signal);
+}
+
+.success {
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--signal);
+}

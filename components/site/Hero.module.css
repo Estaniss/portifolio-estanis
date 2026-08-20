@@ -1,0 +1,39 @@
+.hero {
+  padding: 88px 0 72px;
+}
+
+.content {
+  max-width: 680px;
+}
+
+.headline {
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+}
+
+.headline em {
+  font-style: italic;
+  color: var(--signal);
+}
+
+.sub {
+  margin-top: 22px;
+  max-width: 54ch;
+  font-size: 1.15rem;
+  color: var(--slate);
+}
+
+.rule {
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}

@@ -1,0 +1,153 @@
+.section {
+  padding: 64px 0 80px;
+  border-top: 1px solid var(--line);
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.intro {
+  color: var(--slate);
+  max-width: 58ch;
+  margin-bottom: 32px;
+}
+
+.form {
+  max-width: 640px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.field label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--slate);
+}
+
+.field input,
+.field textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--signal);
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--slate);
+  text-align: right;
+}
+
+.submit {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  padding: 12px 22px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.submit:hover:not(:disabled) {
+  background: var(--signal);
+}
+
+.submit:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.error {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #b3432b;
+  margin-bottom: 16px;
+}
+
+.result {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+}
+
+.score {
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  color: var(--signal);
+  line-height: 1;
+}
+
+.scoreLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--slate);
+  margin-top: 6px;
+  white-space: nowrap;
+}
+
+.summary {
+  font-size: 1.02rem;
+}
+
+.blockTitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--slate);
+  margin: 18px 0 8px;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+
+.pillMatch {
+  border-color: var(--signal);
+  color: var(--signal);
+}
+
+.pillGap {
+  border-color: #d8b7ac;
+  color: #b3432b;
+}
+
+@media (max-width: 620px) {
+  .result {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}

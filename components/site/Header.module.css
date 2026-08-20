@@ -1,0 +1,53 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.dateline {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--slate);
+  white-space: nowrap;
+}
+
+.dateline strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--slate);
+  transition: color 0.15s ease;
+}
+
+.nav a:hover {
+  color: var(--signal);
+}
+
+@media (max-width: 560px) {
+  .nav {
+    gap: 14px;
+  }
+}
