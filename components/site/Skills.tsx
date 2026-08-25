@@ -3,33 +3,54 @@
 // Pills com a stack real, agrupada por categoria — em vez de barra de
 // progresso ou estrelas (que são subjetivas e ninguém confia mesmo).
 
-import styles from "./Skills.module.css";
-import { Reveal } from "./Reveal";
+import styles from './Skills.module.css';
+import { Reveal } from './Reveal';
 
 const CATEGORIES = [
   {
-    label: "FRONTEND",
-    items: ["React", "Next.js", "React Native", "TypeScript", "MUI", "Styled Components", "ANTD", "Tailwind CSS"],
+    label: 'FRONTEND',
+    items: [
+      'React',
+      'Next.js',
+      'React Native',
+      'TypeScript',
+      'MUI',
+      'Styled Components',
+      'ANTD',
+      'Tailwind CSS',
+    ],
   },
   {
-    label: "BACKEND",
-    items: ["Node.js", "PHP Laravel", "APIs RESTful", "JWT", "AES-GCM"],
+    label: 'BACKEND',
+    items: ['Node.js', 'PHP Laravel', 'APIs RESTful', 'JWT', 'AES-GCM'],
   },
   {
-    label: "DADOS",
-    items: ["PostgreSQL", "MySQL", "Oracle", "SQL", "NoSQL", "pgvector", "Redis"],
+    label: 'DADOS',
+    items: [
+      'PostgreSQL',
+      'MySQL',
+      'Oracle',
+      'SQL',
+      'NoSQL',
+      'pgvector',
+      'Redis',
+    ],
   },
   {
-    label: "CLOUD & DEVOPS",
-    items: ["AWS", "Docker", "PM2", "Nginx", "CI/CD"],
+    label: 'CLOUD & DEVOPS',
+    items: ['AWS', 'Docker', 'PM2', 'Nginx', 'CI/CD'],
   },
   {
-    label: "PRÁTICAS",
-    items: ["Clean Code", "Arquitetura de Software", "Scrum"],
+    label: 'PRÁTICAS',
+    items: ['Clean Code', 'Arquitetura de Software', 'Scrum'],
   },
   {
-    label: "FERRAMENTAS",
-    items: ["Git", "Jira", "Monday", "Figma"],
+    label: 'FERRAMENTAS',
+    items: ['Git', 'Jira', 'Monday', 'Figma'],
+  },
+  {
+    label: 'LÍNGUAS ',
+    items: ['Inglês-intermediário', 'Espanhol-intermediário'],
   },
 ];
 

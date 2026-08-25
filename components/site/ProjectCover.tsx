@@ -32,7 +32,7 @@ export function ProjectCover({ id, name }: { id: string; name: string }) {
       {!imageFailed && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          src={`/images/${id}.png`}
+          src={`/images/projects/${id}.png`}
           alt={`Captura de tela do projeto ${name}`}
           className={styles.image}
           onError={() => setImageFailed(true)}

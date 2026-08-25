@@ -22,7 +22,7 @@ const PROJECTS: SiteProject[] = [
     githubUrl: 'https://github.com/Estaniss/financia',
     demoUrl: 'https://financ-ia-simulator.vercel.app/',
   },
-  {
+  /* {
     id: 'linkedai',
     name: 'LinkedAI',
     description:
@@ -36,7 +36,7 @@ const PROJECTS: SiteProject[] = [
       'OpenAI',
     ],
     githubUrl: 'https://github.com/estaniss',
-  },
+  }, */
 ];
 
 export function Projects() {

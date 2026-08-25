@@ -92,3 +92,12 @@
   font-size: 13px;
   color: var(--signal);
 }
+
+/* Adicionar isso ao final do arquivo components/site/Contact.module.css existente */
+
+.error {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #b3432b;
+}
