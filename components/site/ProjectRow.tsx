@@ -16,7 +16,15 @@ export interface SiteProject {
   demoUrl?: string;
 }
 
-export function ProjectRow({ project }: { project: SiteProject }) {
+export function ProjectRow({
+  project,
+  githubLabel = "GitHub",
+  demoLabel = "Demo",
+}: {
+  project: SiteProject;
+  githubLabel?: string;
+  demoLabel?: string;
+}) {
   useProjectView({
     project_id: project.id,
     project_name: project.name,
@@ -37,11 +45,11 @@ export function ProjectRow({ project }: { project: SiteProject }) {
           </span>
           <div className={styles.links}>
             <TrackedProjectLink kind="github" href={project.githubUrl} project={linkPayload}>
-              <span className="text-link">GitHub →</span>
+              <span className="text-link">{githubLabel} →</span>
             </TrackedProjectLink>
             {project.demoUrl && (
               <TrackedProjectLink kind="demo" href={project.demoUrl} project={linkPayload}>
-                <span className="text-link">Demo →</span>
+                <span className="text-link">{demoLabel} →</span>
               </TrackedProjectLink>
             )}
           </div>

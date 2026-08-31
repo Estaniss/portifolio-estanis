@@ -1,68 +1,48 @@
 // components/site/Skills.tsx
-//
-// Pills com a stack real, agrupada por categoria — em vez de barra de
-// progresso ou estrelas (que são subjetivas e ninguém confia mesmo).
 
-import styles from './Skills.module.css';
-import { Reveal } from './Reveal';
+import styles from "./Skills.module.css";
+import { Reveal } from "./Reveal";
 
-const CATEGORIES = [
-  {
-    label: 'FRONTEND',
-    items: [
-      'React',
-      'Next.js',
-      'React Native',
-      'TypeScript',
-      'MUI',
-      'Styled Components',
-      'ANTD',
-      'Tailwind CSS',
+const TEXT = {
+  pt: {
+    eyebrow: "Competências",
+    title: "Com o que trabalho",
+    categories: [
+      { label: "FRONTEND", items: ["React", "Next.js", "React Native", "TypeScript", "MUI", "Styled Components", "ANTD", "Tailwind CSS"] },
+      { label: "MOBILE", items: ["React Native", "Publicação na App Store", "Publicação na Google Play"] },
+      { label: "BACKEND", items: ["Node.js", "PHP Laravel", "APIs RESTful", "JWT"] },
+      { label: "DADOS", items: ["PostgreSQL", "MySQL", "Oracle"] },
+      { label: "CLOUD & DEVOPS", items: ["AWS", "Docker", "Nginx", "CI/CD"] },
+      { label: "PRÁTICAS", items: ["Clean Code", "Scrum", "Git"] },
+      { label: "LÍNGUAS", items: ["Inglês — intermediário", "Espanhol — intermediário"] },
     ],
   },
-  {
-    label: 'BACKEND',
-    items: ['Node.js', 'PHP Laravel', 'APIs RESTful', 'JWT', 'AES-GCM'],
-  },
-  {
-    label: 'DADOS',
-    items: [
-      'PostgreSQL',
-      'MySQL',
-      'Oracle',
-      'SQL',
-      'NoSQL',
-      'pgvector',
-      'Redis',
+  en: {
+    eyebrow: "Skills",
+    title: "What I work with",
+    categories: [
+      { label: "FRONTEND", items: ["React", "Next.js", "React Native", "TypeScript", "MUI", "Styled Components", "ANTD", "Tailwind CSS"] },
+      { label: "MOBILE", items: ["React Native", "App Store publishing", "Google Play publishing"] },
+      { label: "BACKEND", items: ["Node.js", "PHP Laravel", "RESTful APIs", "JWT"] },
+      { label: "DATA", items: ["PostgreSQL", "MySQL", "Oracle"] },
+      { label: "CLOUD & DEVOPS", items: ["AWS", "Docker", "Nginx", "CI/CD"] },
+      { label: "PRACTICES", items: ["Clean Code", "Scrum", "Git"] },
+      { label: "LANGUAGES", items: ["English — intermediate", "Spanish — intermediate"] },
     ],
   },
-  {
-    label: 'CLOUD & DEVOPS',
-    items: ['AWS', 'Docker', 'PM2', 'Nginx', 'CI/CD'],
-  },
-  {
-    label: 'PRÁTICAS',
-    items: ['Clean Code', 'Arquitetura de Software', 'Scrum'],
-  },
-  {
-    label: 'FERRAMENTAS',
-    items: ['Git', 'Jira', 'Monday', 'Figma'],
-  },
-  {
-    label: 'LÍNGUAS ',
-    items: ['Inglês-intermediário', 'Espanhol-intermediário'],
-  },
-];
+} as const;
 
-export function Skills() {
+export function Skills({ lang = "pt" }: { lang?: "pt" | "en" }) {
+  const t = TEXT[lang];
+
   return (
     <section id="competencias" className={styles.section}>
       <div className="container">
-        <p className="eyebrow">Competências</p>
-        <h2 className={styles.title}>Com o que trabalho</h2>
+        <p className="eyebrow">{t.eyebrow}</p>
+        <h2 className={styles.title}>{t.title}</h2>
 
         <dl className={styles.grid}>
-          {CATEGORIES.map((cat, index) => (
+          {t.categories.map((cat, index) => (
             <Reveal key={cat.label} delay={index * 60}>
               <div className={styles.category}>
                 <dt>{cat.label}</dt>
