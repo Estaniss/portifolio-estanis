@@ -37,3 +37,12 @@
   gap: 24px;
   flex-wrap: wrap;
 }
+
+.name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin-bottom: 16px;
+}

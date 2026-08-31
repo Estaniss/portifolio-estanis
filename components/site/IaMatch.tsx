@@ -1,9 +1,4 @@
 // components/site/IaMatch.tsx
-//
-// Isso chama a API do Gemini a cada análise — tem custo real por uso,
-// mesmo na camada gratuita (tem limite de requisições/minuto). O limite
-// de caracteres no formulário e no backend é a proteção básica; se
-// virar alvo de spam, o próximo passo é rate limit por IP.
 
 "use client";
 
@@ -15,7 +10,35 @@ import type { IaMatchResult } from "@/app/api/ia-match/analyze/route";
 
 const MAX_LENGTH = 4000;
 
-export function IaMatch() {
+const TEXT = {
+  pt: {
+    eyebrow: "IA Match",
+    title: "Sua vaga combina comigo?",
+    intro: "Cola a descrição de uma vaga e uma IA compara com meu perfil real — stack, experiência e senioridade. Sem enfeite: se não bater, ela aponta onde não bate.",
+    companyLabel: "EMPRESA (OPCIONAL)",
+    jobLabel: "DESCRIÇÃO DA VAGA",
+    analyzing: "ANALISANDO...",
+    submit: "ANALISAR COMPATIBILIDADE",
+    scoreLabel: "COMPATIBILIDADE",
+    stackTitle: "STACK EM COMUM",
+    gapsTitle: "PONTOS DE ATENÇÃO",
+  },
+  en: {
+    eyebrow: "IA Match",
+    title: "Does your job match me?",
+    intro: "Paste a job description and an AI compares it against my real profile — stack, experience and seniority. No sugarcoating: if it doesn't fit, it says where.",
+    companyLabel: "COMPANY (OPTIONAL)",
+    jobLabel: "JOB DESCRIPTION",
+    analyzing: "ANALYZING...",
+    submit: "ANALYZE COMPATIBILITY",
+    scoreLabel: "COMPATIBILITY",
+    stackTitle: "SHARED STACK",
+    gapsTitle: "GAPS TO NOTE",
+  },
+} as const;
+
+export function IaMatch({ lang = "pt" }: { lang?: "pt" | "en" }) {
+  const t = TEXT[lang];
   const recordIaMatch = useRecordIaMatch();
   const [companyName, setCompanyName] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -36,13 +59,14 @@ export function IaMatch() {
         body: JSON.stringify({
           job_description: jobDescription,
           company_name: companyName || undefined,
+          language: lang, // pede pra IA responder no mesmo idioma da página
         }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error ?? "Não foi possível analisar agora.");
+        setError(data.error ?? "—");
         return;
       }
 
@@ -58,7 +82,7 @@ export function IaMatch() {
         soft_skills: analysis.soft_skills,
       });
     } catch {
-      setError("Não foi possível analisar agora. Tenta de novo em instantes.");
+      setError("—");
     } finally {
       setLoading(false);
     }
@@ -68,26 +92,17 @@ export function IaMatch() {
     <section id="ia-match" className={styles.section}>
       <div className="container">
         <Reveal>
-        <p className="eyebrow">IA Match</p>
-        <h2 className={styles.title}>Sua vaga combina comigo?</h2>
-        <p className={styles.intro}>
-          Cola a descrição de uma vaga e uma IA compara com meu perfil real —
-          stack, experiência e senioridade. Sem enfeite: se não bater, ela
-          aponta onde não bate.
-        </p>
+        <p className="eyebrow">{t.eyebrow}</p>
+        <h2 className={styles.title}>{t.title}</h2>
+        <p className={styles.intro}>{t.intro}</p>
 
         <form className={styles.form} onSubmit={handleSubmit}>
           <div className={styles.field}>
-            <label htmlFor="company">EMPRESA (OPCIONAL)</label>
-            <input
-              id="company"
-              type="text"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-            />
+            <label htmlFor="company">{t.companyLabel}</label>
+            <input id="company" type="text" value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
           </div>
           <div className={styles.field}>
-            <label htmlFor="job">DESCRIÇÃO DA VAGA</label>
+            <label htmlFor="job">{t.jobLabel}</label>
             <textarea
               id="job"
               rows={6}
@@ -96,15 +111,13 @@ export function IaMatch() {
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
             />
-            <div className={styles.count}>
-              {jobDescription.length}/{MAX_LENGTH}
-            </div>
+            <div className={styles.count}>{jobDescription.length}/{MAX_LENGTH}</div>
           </div>
 
           {error && <p className={styles.error}>{error}</p>}
 
           <button type="submit" className={styles.submit} disabled={loading}>
-            {loading ? "ANALISANDO..." : "ANALISAR COMPATIBILIDADE"}
+            {loading ? t.analyzing : t.submit}
           </button>
         </form>
 
@@ -112,19 +125,17 @@ export function IaMatch() {
           <div className={styles.result}>
             <div>
               <div className={styles.score}>{Math.round(result.compatibility_score)}%</div>
-              <div className={styles.scoreLabel}>COMPATIBILIDADE</div>
+              <div className={styles.scoreLabel}>{t.scoreLabel}</div>
             </div>
             <div>
               <p className={styles.summary}>{result.summary}</p>
 
               {result.predominant_stack.length > 0 && (
                 <>
-                  <p className={styles.blockTitle}>STACK EM COMUM</p>
+                  <p className={styles.blockTitle}>{t.stackTitle}</p>
                   <div className={styles.pills}>
                     {result.predominant_stack.map((item) => (
-                      <span key={item} className={`${styles.pill} ${styles.pillMatch}`}>
-                        {item}
-                      </span>
+                      <span key={item} className={`${styles.pill} ${styles.pillMatch}`}>{item}</span>
                     ))}
                   </div>
                 </>
@@ -132,12 +143,10 @@ export function IaMatch() {
 
               {result.gaps.length > 0 && (
                 <>
-                  <p className={styles.blockTitle}>PONTOS DE ATENÇÃO</p>
+                  <p className={styles.blockTitle}>{t.gapsTitle}</p>
                   <div className={styles.pills}>
                     {result.gaps.map((item) => (
-                      <span key={item} className={`${styles.pill} ${styles.pillGap}`}>
-                        {item}
-                      </span>
+                      <span key={item} className={`${styles.pill} ${styles.pillGap}`}>{item}</span>
                     ))}
                   </div>
                 </>

@@ -51,3 +51,19 @@
     gap: 14px;
   }
 }
+
+.langSwitch {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 3px 8px;
+  text-decoration: none;
+  color: var(--ink) !important;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.langSwitch:hover {
+  border-color: var(--signal);
+  color: var(--signal) !important;
+}

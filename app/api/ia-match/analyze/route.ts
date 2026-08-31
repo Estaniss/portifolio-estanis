@@ -1,19 +1,3 @@
-// app/api/ia-match/analyze/route.ts
-//
-// Endpoint PÚBLICO (qualquer visitante do portfólio pode chamar) que
-// compara uma descrição de vaga contra o perfil real do Thomas via
-// Gemini.
-//
-// ATUALIZAÇÃO 3: rate limit por IP. Cada chamada custa uma requisição
-// real à API do Gemini — sem limite, um bot (ou alguém testando em
-// loop) esgota a cota gratuita rapidinho. Limite: 5 análises a cada 10
-// minutos por IP.
-//
-// Mesma ressalva do endpoint de contato: rate limit em memória não
-// sobrevive a cold start em serverless (cada instância nova zera o
-// contador). É uma primeira barreira, não uma solução definitiva — se
-// virar alvo de abuso de verdade, evolui pra Upstash Redis.
-
 import { NextResponse } from 'next/server';
 import { Type } from '@google/genai';
 import { gemini, GEMINI_MODEL } from '@/lib/ai/gemini-client';
@@ -24,10 +8,9 @@ const MAX_LENGTH = 4000;
 const MAX_RETRIES = 2;
 const BASE_RETRY_DELAY_MS = 1500;
 
-const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutos
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
 
-// Map em memória: ip -> lista de timestamps das últimas chamadas aceitas.
 const requestsByIp = new Map<string, number[]>();
 
 function checkRateLimit(ip: string): {
@@ -36,7 +19,6 @@ function checkRateLimit(ip: string): {
 } {
   const now = Date.now();
   const windowStart = now - RATE_LIMIT_WINDOW_MS;
-
   const timestamps = (requestsByIp.get(ip) ?? []).filter(
     (t) => t > windowStart
   );
@@ -54,9 +36,12 @@ function checkRateLimit(ip: string): {
   return { allowed: true };
 }
 
+type Language = 'pt' | 'en';
+
 interface AnalyzeBody {
   job_description: string;
   company_name?: string;
+  language?: Language;
 }
 
 export interface IaMatchResult {
@@ -69,44 +54,75 @@ export interface IaMatchResult {
   gaps: string[];
 }
 
-const SYSTEM_INSTRUCTION = `Você avalia, de forma honesta e criteriosa, a compatibilidade entre o perfil de um candidato e uma descrição de vaga.
+const ERROR_MESSAGES = {
+  pt: {
+    tooShort: (n: number) =>
+      `Cole uma descrição de vaga com pelo menos ${n} caracteres.`,
+    tooLong: (n: number) => `Descrição muito longa (máximo ${n} caracteres).`,
+    rateLimited: (min: number) =>
+      `Muitas análises em pouco tempo. Tenta de novo em ${min} minuto(s).`,
+    overloaded:
+      'O modelo de IA está sobrecarregado agora (alta demanda no plano gratuito). Tenta de novo em um minuto.',
+    network: 'Conexão instável agora — tenta de novo em alguns segundos.',
+    generic: 'Não foi possível analisar agora. Tenta de novo em instantes.',
+  },
+  en: {
+    tooShort: (n: number) =>
+      `Paste a job description with at least ${n} characters.`,
+    tooLong: (n: number) => `Description too long (max ${n} characters).`,
+    rateLimited: (min: number) =>
+      `Too many analyses in a short time. Try again in ${min} minute(s).`,
+    overloaded:
+      'The AI model is overloaded right now (high demand on the free tier). Try again in a minute.',
+    network: 'Unstable connection right now — try again in a few seconds.',
+    generic: "Couldn't analyze it right now. Try again in a moment.",
+  },
+} as const;
 
-Não infle a nota pra agradar. Se a vaga pedir coisas que o perfil não cobre, isso deve aparecer nos "gaps" e reduzir a nota. Se o texto enviado não parecer uma descrição de vaga de verdade (ex: só um monte de palavras soltas, ou vazio de sentido), ainda assim responda no formato pedido, mas com compatibility_score 0 e summary explicando que não foi possível avaliar.`;
+function systemInstructionFor(language: Language): string {
+  const languageInstruction =
+    language === 'en'
+      ? 'Respond in English, in all text fields (summary, gaps, etc). Technology/tool names stay as-is (e.g. React, TypeScript).'
+      : 'Responda em português, em todos os campos de texto (summary, gaps, etc). Nomes de tecnologias/ferramentas continuam como estão (ex: React, TypeScript).';
+
+  return `You evaluate, honestly and critically, how compatible a candidate's profile is with a job description.
+
+Don't inflate the score to please anyone. If the job asks for things the profile doesn't cover, that should show up in "gaps" and lower the score. If the submitted text doesn't look like a real job description (e.g. random words, no real meaning), still respond in the requested format, but with compatibility_score 0 and a summary explaining it couldn't be evaluated.
+
+${languageInstruction}`;
+}
 
 const RESPONSE_SCHEMA = {
   type: Type.OBJECT,
   properties: {
-    compatibility_score: {
-      type: Type.NUMBER,
-      description: '0 a 100, quão compatível o perfil é com a vaga',
-    },
+    compatibility_score: { type: Type.NUMBER, description: '0 to 100' },
     summary: {
       type: Type.STRING,
-      description: '2-3 frases em português explicando a nota',
+      description: '2-3 sentence summary explaining the score',
     },
     seniority_estimate: {
       type: Type.STRING,
-      description: 'Senioridade que a vaga pede (ex: júnior, pleno, sênior)',
+      description: 'Seniority the job asks for',
     },
     predominant_stack: {
       type: Type.ARRAY,
       items: { type: Type.STRING },
-      description: 'Tecnologias da vaga que também estão no perfil',
+      description: 'Job technologies also in the profile',
     },
     hard_skills: {
       type: Type.ARRAY,
       items: { type: Type.STRING },
-      description: 'Hard skills da vaga que o perfil atende',
+      description: 'Hard skills from the job the profile covers',
     },
     soft_skills: {
       type: Type.ARRAY,
       items: { type: Type.STRING },
-      description: 'Soft skills mencionadas na vaga (inferidas do texto)',
+      description: 'Soft skills mentioned in the job',
     },
     gaps: {
       type: Type.ARRAY,
       items: { type: Type.STRING },
-      description: 'Requisitos da vaga que o perfil não cobre claramente',
+      description: "Job requirements the profile doesn't clearly cover",
     },
   },
   required: [
@@ -153,7 +169,7 @@ function isRetryableError(err: unknown): boolean {
   return isNetworkError(err) || isOverloadedError(err);
 }
 
-async function generateWithRetry(prompt: string) {
+async function generateWithRetry(prompt: string, language: Language) {
   let lastError: unknown;
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
@@ -162,26 +178,18 @@ async function generateWithRetry(prompt: string) {
         model: GEMINI_MODEL,
         contents: prompt,
         config: {
-          systemInstruction: SYSTEM_INSTRUCTION,
+          systemInstruction: systemInstructionFor(language),
           responseMimeType: 'application/json',
           responseSchema: RESPONSE_SCHEMA,
         },
       });
     } catch (err) {
       lastError = err;
-
       if (attempt < MAX_RETRIES && isRetryableError(err)) {
         const delay = BASE_RETRY_DELAY_MS * (attempt + 1);
-        const reason = isOverloadedError(err)
-          ? 'modelo sobrecarregado'
-          : 'falha de rede';
-        console.warn(
-          `[ia-match/analyze] tentativa ${attempt + 1} falhou (${reason}), tentando de novo em ${delay}ms...`
-        );
         await sleep(delay);
         continue;
       }
-
       throw err;
     }
   }
@@ -190,62 +198,60 @@ async function generateWithRetry(prompt: string) {
 }
 
 export async function POST(request: Request) {
+  let lang: Language = 'pt';
+
   try {
     const ip =
       request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
       'unknown';
     const rateLimit = checkRateLimit(ip);
 
+    const body = (await request.json()) as AnalyzeBody;
+    lang = body.language === 'en' ? 'en' : 'pt';
+    const messages = ERROR_MESSAGES[lang];
+
     if (!rateLimit.allowed) {
       return NextResponse.json(
         {
-          error: `Muitas análises em pouco tempo. Tenta de novo em ${Math.ceil(
-            (rateLimit.retryAfterSeconds ?? 60) / 60
-          )} minuto(s).`,
+          error: messages.rateLimited(
+            Math.ceil((rateLimit.retryAfterSeconds ?? 60) / 60)
+          ),
         },
         { status: 429 }
       );
     }
 
-    const body = (await request.json()) as AnalyzeBody;
     const jobDescription = (body.job_description ?? '').trim();
 
     if (jobDescription.length < MIN_LENGTH) {
       return NextResponse.json(
-        {
-          error: `Cole uma descrição de vaga com pelo menos ${MIN_LENGTH} caracteres.`,
-        },
+        { error: messages.tooShort(MIN_LENGTH) },
         { status: 400 }
       );
     }
     if (jobDescription.length > MAX_LENGTH) {
       return NextResponse.json(
-        { error: `Descrição muito longa (máximo ${MAX_LENGTH} caracteres).` },
+        { error: messages.tooLong(MAX_LENGTH) },
         { status: 400 }
       );
     }
 
-    const prompt = `PERFIL DO CANDIDATO:\n${THOMAS_PROFILE}\n\nDESCRIÇÃO DA VAGA:\n${jobDescription}`;
+    const prompt = `CANDIDATE PROFILE (in Portuguese, translate concepts as needed):\n${THOMAS_PROFILE}\n\nJOB DESCRIPTION:\n${jobDescription}`;
 
-    const response = await generateWithRetry(prompt);
+    const response = await generateWithRetry(prompt, lang);
 
     const text = response.text;
     if (!text) throw new Error('Resposta da IA sem conteúdo de texto');
 
     const result = JSON.parse(text) as IaMatchResult;
-
     return NextResponse.json(result);
   } catch (err) {
     console.error('[ia-match/analyze] falha na análise:', err);
+    const messages = ERROR_MESSAGES[lang];
 
-    let message =
-      'Não foi possível analisar agora. Tenta de novo em instantes.';
-    if (isOverloadedError(err)) {
-      message =
-        'O modelo de IA está sobrecarregado agora (alta demanda no plano gratuito). Tenta de novo em um minuto.';
-    } else if (isNetworkError(err)) {
-      message = 'Conexão instável agora — tenta de novo em alguns segundos.';
-    }
+    let message: string = messages.generic;
+    if (isOverloadedError(err)) message = messages.overloaded;
+    else if (isNetworkError(err)) message = messages.network;
 
     return NextResponse.json({ error: message }, { status: 500 });
   }
