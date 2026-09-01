@@ -9,7 +9,7 @@ const MAX_RETRIES = 2;
 const BASE_RETRY_DELAY_MS = 1500;
 
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 5;
+const RATE_LIMIT_MAX_REQUESTS = 15; // era 5
 
 const requestsByIp = new Map<string, number[]>();
 
@@ -161,7 +161,8 @@ function isOverloadedError(err: unknown): boolean {
     status === 503 ||
     status === 429 ||
     message.includes('UNAVAILABLE') ||
-    message.includes('high demand')
+    message.includes('high demand') ||
+    message.includes('RESOURCE_EXHAUSTED')
   );
 }
 
