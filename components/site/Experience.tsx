@@ -30,7 +30,7 @@ const TEXT = {
         role: 'Sales Development Representative',
         company: 'Baitz Solutions',
         description:
-          'Antes do desenvolvimento — a base de comunicação e entendimento de necessidade de cliente que ainda carrego pra como escrevo requisito e converso com stakeholder.',
+          'Antes do desenvolvimento, a base de comunicação e entendimento de necessidade de cliente que ainda carrego pra como escrevo requisito e converso com stakeholder.',
       },
     ],
   },
@@ -57,7 +57,7 @@ const TEXT = {
         role: 'Sales Development Representative',
         company: 'Baitz Solutions',
         description:
-          'Before development — the communication foundation and client-need understanding I still carry into how I write requirements and talk to stakeholders.',
+          'Before development, the communication foundation and client-need understanding I still carry into how I write requirements and talk to stakeholders.',
       },
     ],
   },
