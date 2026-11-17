@@ -10,6 +10,37 @@ interface BilingualProject extends Omit<SiteProject, 'description'> {
 
 const PROJECTS: BilingualProject[] = [
   {
+    id: 'luma-learning',
+    name: 'Luma Learning',
+    description_pt:
+      'Landing page responsiva desenvolvida a partir do Figma para a Buzzvel. Inclui navegação adaptada para dispositivos móveis, formulário acessível e imagens otimizadas com next/image.',
+    description_en:
+      'Responsive landing page built from Figma designs for Buzzvel. Includes mobile navigation, an accessible contact form, and optimized images with next/image.',
+    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS v4'],
+    githubUrl: 'https://github.com/Estaniss/buzzvel-challenge',
+    demoUrl: 'https://buzzvel-challenge-7tde.vercel.app/',
+  },
+  {
+    id: 'jungle-gaming',
+    name: 'Jungle Gaming',
+    description_pt:
+      'Marketplace de NFTs com API simulada por MSW e comunicação em tempo real via Socket.IO. Inclui gerenciamento de estado, testes E2E e cenários de falha para validar os fluxos da aplicação.',
+    description_en:
+      'NFT marketplace with an MSW-mocked API and real-time communication through Socket.IO. Includes state management, E2E tests, and failure scenarios to validate application flows.',
+    technologies: [
+      'React',
+      'TypeScript',
+      'Vite',
+      'Tailwind CSS',
+      'Zustand',
+      'Socket.IO',
+      'MSW',
+      'Playwright',
+    ],
+    githubUrl: 'https://github.com/Estaniss/desafio-jungle-gaming',
+    demoUrl: 'https://desafio-jungle-gaming-gules.vercel.app/',
+  },
+  {
     id: 'paulapalooza',
     name: 'Paulapalooza',
     description_pt:
