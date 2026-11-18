@@ -1,5 +1,3 @@
-// components/site/Contact.tsx
-
 "use client";
 
 import { useState, type FormEvent } from "react";
@@ -14,47 +12,87 @@ type Status = "idle" | "sending" | "sent" | "error";
 
 const TEXT = {
   pt: {
-    eyebrow: "Contato",
-    title: "Bora conversar sobre o próximo projeto.",
-    linkedin: "LinkedIn →",
-    github: "GitHub →",
-    whatsapp: "WhatsApp →",
-    cvAts: "Currículo (ATS) ↓",
-    cvVisual: "Currículo (visual) ↓",
+    eyebrow: "Vamos conversar",
+    index: "06 — CONTATO",
+    title: "Boas ideias começam com uma conversa.",
+    intro:
+      "Tem um projeto, uma oportunidade ou simplesmente quer trocar uma ideia? Estou aberto a conhecer novos desafios.",
+    availability: "ABERTO A OPORTUNIDADES",
+    emailLabel: "PREFERE UM EMAIL?",
+    socialLabel: "ME ENCONTRE TAMBÉM",
+    linkedin: "LinkedIn",
+    github: "GitHub",
+    whatsapp: "WhatsApp",
+    resumeLabel: "MATERIAIS PROFISSIONAIS",
+    cvAts: "Currículo ATS",
+    cvVisual: "Currículo visual",
+    formEyebrow: "ENVIE UMA MENSAGEM",
+    formTitle: "Vamos tirar sua ideia do papel?",
+    formDescription: "Preencha os campos abaixo. Retorno assim que possível.",
     nameLabel: "SEU NOME",
-    emailLabel: "SEU EMAIL",
-    messageLabel: "MENSAGEM",
-    sending: "ENVIANDO...",
-    submit: "ENVIAR MENSAGEM",
-    sent: "MENSAGEM ENVIADA — RESPONDO EM BREVE.",
-    genericError: "Não foi possível enviar agora. Tenta de novo em instantes.",
+    emailLabelField: "SEU EMAIL",
+    messageLabel: "SUA MENSAGEM",
+    namePlaceholder: "Como posso te chamar?",
+    emailPlaceholder: "seu@email.com",
+    messagePlaceholder:
+      "Conte um pouco sobre o projeto, oportunidade ou assunto...",
+    sending: "ENVIANDO MENSAGEM...",
+    submit: "Enviar mensagem",
+    sentTitle: "Mensagem enviada!",
+    sent: "Obrigado pelo contato. Vou retornar assim que possível.",
+    genericError:
+      "Não foi possível enviar agora. Tente novamente em instantes.",
+    errorTitle: "Não foi possível enviar",
+    retry: "Tente novamente",
+    footer: "FEITO COM INTENÇÃO · DISPONÍVEL PARA NOVOS DESAFIOS",
   },
   en: {
-    eyebrow: "Contact",
-    title: "Let's talk about the next project.",
-    linkedin: "LinkedIn →",
-    github: "GitHub →",
-    whatsapp: "WhatsApp →",
-    cvAts: "Resume (ATS) ↓",
-    cvVisual: "Resume (visual) ↓",
+    eyebrow: "Let's connect",
+    index: "06 — CONTACT",
+    title: "Great ideas start with a conversation.",
+    intro:
+      "Have a project, an opportunity, or simply want to exchange ideas? I'm open to new challenges.",
+    availability: "OPEN TO OPPORTUNITIES",
+    emailLabel: "PREFER EMAIL?",
+    socialLabel: "FIND ME ELSEWHERE",
+    linkedin: "LinkedIn",
+    github: "GitHub",
+    whatsapp: "WhatsApp",
+    resumeLabel: "PROFESSIONAL MATERIALS",
+    cvAts: "ATS Resume",
+    cvVisual: "Visual Resume",
+    formEyebrow: "SEND A MESSAGE",
+    formTitle: "Let's bring your idea to life.",
+    formDescription:
+      "Fill in the fields below. I'll get back to you as soon as possible.",
     nameLabel: "YOUR NAME",
-    emailLabel: "YOUR EMAIL",
-    messageLabel: "MESSAGE",
-    sending: "SENDING...",
-    submit: "SEND MESSAGE",
-    sent: "MESSAGE SENT — I'LL GET BACK TO YOU SOON.",
-    genericError: "Couldn't send it right now. Try again in a moment.",
+    emailLabelField: "YOUR EMAIL",
+    messageLabel: "YOUR MESSAGE",
+    namePlaceholder: "What should I call you?",
+    emailPlaceholder: "you@email.com",
+    messagePlaceholder:
+      "Tell me a little about your project, opportunity or idea...",
+    sending: "SENDING MESSAGE...",
+    submit: "Send message",
+    sentTitle: "Message sent!",
+    sent: "Thanks for reaching out. I'll get back to you as soon as possible.",
+    genericError: "Couldn't send it right now. Please try again shortly.",
+    errorTitle: "Couldn't send your message",
+    retry: "Try again",
+    footer: "MADE WITH INTENTION · OPEN TO NEW CHALLENGES",
   },
 } as const;
 
 export function Contact({ lang = "pt" }: { lang?: "pt" | "en" }) {
   const t = TEXT[lang];
   const { track } = useTracker();
+
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setStatus("sending");
     setErrorMessage(null);
 
@@ -90,72 +128,239 @@ export function Contact({ lang = "pt" }: { lang?: "pt" | "en" }) {
   }
 
   return (
-    <section id="contato" className={styles.section}>
+    <section
+      id="contato"
+      className={styles.section}
+      aria-labelledby="contact-title"
+    >
+      <div className={styles.backgroundGlow} aria-hidden="true" />
+
       <div className="container">
         <Reveal>
-        <p className="eyebrow">{t.eyebrow}</p>
-        <h2 className={styles.title}>{t.title}</h2>
+          <div className={styles.heading}>
+            <div className={styles.headingTop}>
+              <p className="eyebrow">{t.eyebrow}</p>
+              <span className={styles.sectionIndex}>{t.index}</span>
+            </div>
 
-        <a className={styles.emailLink} href="mailto:estanislau124@hotmail.com">
-          estanislau124@hotmail.com
-        </a>
+            <div className={styles.availability}>
+              <span className={styles.statusDot} />
+              {t.availability}
+            </div>
 
-        <div className={styles.row}>
-          <TrackedContactLink href="https://www.linkedin.com/in/thomas-estanislau-45ab05124/" channel="linkedin">
-            <span className="text-link">{t.linkedin}</span>
-          </TrackedContactLink>
-          <TrackedContactLink href="https://github.com/estaniss" channel="github">
-            <span className="text-link">{t.github}</span>
-          </TrackedContactLink>
-          <TrackedContactLink href="https://wa.me/5516997137932" channel="whatsapp">
-            <span className="text-link">{t.whatsapp}</span>
-          </TrackedContactLink>
-        </div>
+            <h2 id="contact-title" className={styles.title}>
+              {t.title}
+              <span>.</span>
+            </h2>
 
-        <div className={styles.downloads}>
-          <TrackedDownloadLink href="/docs/cv-ats-pt.pdf" download documentType="cv_ats" language="pt">
-            <span className="text-link">{t.cvAts}</span>
-          </TrackedDownloadLink>
-          <TrackedDownloadLink href="/docs/cv-visual-pt.pdf" download documentType="cv_visual" language="pt">
-            <span className="text-link">{t.cvVisual}</span>
-          </TrackedDownloadLink>
-        </div>
+            <p className={styles.intro}>{t.intro}</p>
+          </div>
 
-        <div className={styles.formWrap}>
-          {status === "sent" ? (
-            <p className={styles.success}>{t.sent}</p>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                name="website"
-                tabIndex={-1}
-                autoComplete="off"
-                style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
-                aria-hidden="true"
-              />
+          <div className={styles.layout}>
+            <div className={styles.contactInfo}>
+              <div className={styles.emailBlock}>
+                <p className={styles.blockLabel}>{t.emailLabel}</p>
 
-              <div className={styles.field}>
-                <label htmlFor="name">{t.nameLabel}</label>
-                <input id="name" name="name" type="text" />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="email">{t.emailLabel}</label>
-                <input id="email" name="email" type="email" required />
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="message">{t.messageLabel}</label>
-                <textarea id="message" name="message" rows={4} required minLength={10} />
+                <a
+                  className={styles.emailLink}
+                  href="mailto:estanislau124@hotmail.com"
+                >
+                  estanislau124
+                  <span>@hotmail.com</span>
+                  <span className={styles.emailArrow}>↗</span>
+                </a>
               </div>
 
-              {status === "error" && errorMessage && <p className={styles.error}>{errorMessage}</p>}
+              <div className={styles.socialBlock}>
+                <p className={styles.blockLabel}>{t.socialLabel}</p>
 
-              <button type="submit" className={styles.submit} disabled={status === "sending"}>
-                {status === "sending" ? t.sending : t.submit}
-              </button>
-            </form>
-          )}
-        </div>
+                <div className={styles.socialLinks}>
+                  <TrackedContactLink
+                    href="https://www.linkedin.com/in/thomas-estanislau-45ab05124/"
+                    channel="linkedin"
+                  >
+                    <span className={styles.socialLink}>
+                      <span>{t.linkedin}</span>
+                      <span className={styles.linkArrow}>↗</span>
+                    </span>
+                  </TrackedContactLink>
+
+                  <TrackedContactLink
+                    href="https://github.com/estaniss"
+                    channel="github"
+                  >
+                    <span className={styles.socialLink}>
+                      <span>{t.github}</span>
+                      <span className={styles.linkArrow}>↗</span>
+                    </span>
+                  </TrackedContactLink>
+
+                  <TrackedContactLink
+                    href="https://wa.me/5516997137932"
+                    channel="whatsapp"
+                  >
+                    <span className={styles.socialLink}>
+                      <span>{t.whatsapp}</span>
+                      <span className={styles.linkArrow}>↗</span>
+                    </span>
+                  </TrackedContactLink>
+                </div>
+              </div>
+
+              <div className={styles.resumeBlock}>
+                <p className={styles.blockLabel}>{t.resumeLabel}</p>
+
+                <div className={styles.resumeLinks}>
+                  <TrackedDownloadLink
+                    href="/docs/cv-ats-pt.pdf"
+                    download
+                    documentType="cv_ats"
+                    language="pt"
+                  >
+                    <span className={styles.resumeLink}>
+                      <span className={styles.documentIcon}>PDF</span>
+                      <span>{t.cvAts}</span>
+                      <span className={styles.downloadArrow}>↓</span>
+                    </span>
+                  </TrackedDownloadLink>
+
+                  <TrackedDownloadLink
+                    href="/docs/cv-visual-pt.pdf"
+                    download
+                    documentType="cv_visual"
+                    language="pt"
+                  >
+                    <span className={styles.resumeLink}>
+                      <span className={styles.documentIcon}>PDF</span>
+                      <span>{t.cvVisual}</span>
+                      <span className={styles.downloadArrow}>↓</span>
+                    </span>
+                  </TrackedDownloadLink>
+                </div>
+              </div>
+
+              <div className={styles.contactFoot}>
+                <span>THOMAS ESTANISLAU</span>
+                <span>© 2026</span>
+              </div>
+            </div>
+
+            <div className={styles.formPanel}>
+              {status === "sent" ? (
+                <div className={styles.success}>
+                  <div className={styles.successIcon}>✓</div>
+
+                  <span className={styles.formEyebrow}>MESSAGE DELIVERED</span>
+
+                  <h3>{t.sentTitle}</h3>
+
+                  <p>{t.sent}</p>
+                </div>
+              ) : (
+                <>
+                  <div className={styles.formHeader}>
+                    <span className={styles.formEyebrow}>
+                      <span className={styles.statusDot} />
+                      {t.formEyebrow}
+                    </span>
+
+                    <h3 className={styles.formTitle}>{t.formTitle}</h3>
+
+                    <p className={styles.formDescription}>
+                      {t.formDescription}
+                    </p>
+                  </div>
+
+                  <form className={styles.form} onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      className={styles.honeypot}
+                    />
+
+                    <div className={styles.field}>
+                      <label htmlFor="name">{t.nameLabel}</label>
+
+                      <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder={t.namePlaceholder}
+                        autoComplete="name"
+                      />
+                    </div>
+
+                    <div className={styles.field}>
+                      <label htmlFor="email">{t.emailLabelField}</label>
+
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder={t.emailPlaceholder}
+                        autoComplete="email"
+                        required
+                      />
+                    </div>
+
+                    <div className={styles.field}>
+                      <label htmlFor="message">{t.messageLabel}</label>
+
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={5}
+                        minLength={10}
+                        required
+                        placeholder={t.messagePlaceholder}
+                      />
+                    </div>
+
+                    {status === "error" && errorMessage && (
+                      <div className={styles.error} role="alert">
+                        <span>!</span>
+                        <p>{errorMessage}</p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setStatus("idle");
+                            setErrorMessage(null);
+                          }}
+                        >
+                          {t.retry}
+                        </button>
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      className={styles.submit}
+                      disabled={status === "sending"}
+                    >
+                      <span>{status === "sending" ? t.sending : t.submit}</span>
+
+                      {status === "sending" ? (
+                        <span className={styles.spinner} />
+                      ) : (
+                        <span className={styles.submitArrow}>↗</span>
+                      )}
+                    </button>
+                  </form>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.footer}>
+            <span>{t.footer}</span>
+            <span>SÃO PAULO - SP · BRASIL</span>
+          </div>
+          <footer className={styles.footer}>
+            Developed with ❤️ by Thomas Estanislau.
+          </footer>
         </Reveal>
       </div>
     </section>

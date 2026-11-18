@@ -1,33 +1,97 @@
+
 .cover {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
-  border: 1px solid var(--line);
   overflow: hidden;
-  background: var(--signal-soft);
+  isolation: isolate;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+.cover::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 1px solid rgba(198, 243, 107, 0);
+  content: '';
+  pointer-events: none;
+  transition: border-color 0.35s ease;
+}
+
+.cover:hover::after {
+  border-color: rgba(198, 243, 107, 0.3);
 }
 
 .image {
-  width: 100%;
-  height: 100%;
   object-fit: cover;
-  display: block;
+  object-position: center;
+  transition:
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.4s ease;
+}
+
+.cover:hover .image {
+  transform: scale(1.035);
+  filter: brightness(1.04);
 }
 
 .abstract {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .label {
   position: absolute;
-  bottom: 10px;
-  left: 12px;
+  z-index: 2;
+  bottom: 18px;
+  left: 18px;
+  padding: 7px 10px;
+  border: 1px solid rgba(198, 243, 107, 0.2);
+  border-radius: 2px;
+  color: var(--signal);
+  background: rgba(9, 11, 10, 0.82);
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.05em;
-  color: var(--slate);
-  background: var(--paper);
-  padding: 2px 6px;
-  border: 1px solid var(--line);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  backdrop-filter: blur(8px);
+}
+
+.cornerMark {
+  position: absolute;
+  z-index: 2;
+  top: 15px;
+  right: 16px;
+  color: rgba(241, 244, 237, 0.6);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.cover:hover .cornerMark {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 720px) {
+  .cornerMark {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image,
+  .cover::after,
+  .cornerMark {
+    transition: none;
+  }
 }
