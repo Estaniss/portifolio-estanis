@@ -1,5 +1,3 @@
-// components/site/Header.tsx
-
 import Link from "next/link";
 import styles from "./Header.module.css";
 
@@ -14,6 +12,8 @@ const TEXT = {
       { href: "#contato", label: "CONTATO" },
     ],
     status: "DISPONÍVEL",
+    location: "SÃO PAULO, BR",
+    navigation: "Navegação principal",
   },
   en: {
     nav: [
@@ -25,31 +25,72 @@ const TEXT = {
       { href: "#contato", label: "CONTACT" },
     ],
     status: "AVAILABLE",
+    location: "SÃO PAULO, BR",
+    navigation: "Main navigation",
   },
 } as const;
 
-export function Header({ lang = "pt" }: { lang?: "pt" | "en" }) {
+interface HeaderProps {
+  lang?: "pt" | "en";
+}
+
+export function Header({ lang = "pt" }: HeaderProps) {
   const t = TEXT[lang];
   const otherLangHref = lang === "pt" ? "/en" : "/";
 
   return (
     <header className={styles.header}>
-      <div className={`container ${styles.row}`}>
-        <span className={styles.dateline}>
-          <strong>THOMAS ESTANISLAU</strong> · FULLSTACK · SÃO PAULO, BR ·{" "}
-          {t.status}
-          <span className="blink">_</span>
-        </span>
-        <nav className={styles.nav}>
-          {t.nav.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
-          ))}
-          <Link href={otherLangHref} className={styles.langSwitch}>
-            {lang === "pt" ? "EN" : "PT"}
+      <div className={`container ${styles.container}`}>
+        <div className={styles.top}>
+          <div className={styles.identity}>
+            <span className={styles.brand}>
+              THOMAS<span className={styles.brandAccent}>.</span>
+              ESTANISLAU
+            </span>
+
+            <span className={styles.divider} aria-hidden="true" />
+
+            <span className={styles.role}>FULLSTACK DEVELOPER</span>
+          </div>
+
+          <div className={styles.meta}>
+            <span className={styles.location}>{t.location}</span>
+
+            <span className={styles.status}>
+              <span className={styles.statusDot} aria-hidden="true" />
+              {t.status}
+            </span>
+          </div>
+        </div>
+
+        <div className={styles.navigationRow}>
+          <nav className={styles.nav} aria-label={t.navigation}>
+            {t.nav.map((item) => (
+              <a key={item.href} href={item.href}>
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <Link
+            href={otherLangHref}
+            className={styles.langSwitch}
+            aria-label={
+              lang === "pt" ? "Switch to English" : "Mudar para português"
+            }
+            hrefLang={lang === "pt" ? "en" : "pt-BR"}
+          >
+            <img
+              src={lang === "pt" ? "/flags/us.svg" : "/flags/br.svg"}
+              alt=""
+              aria-hidden="true"
+              className={styles.flag}
+            />
+            <span className={styles.langLabel}>
+              {lang === "pt" ? "EN" : "PT"}
+            </span>
           </Link>
-        </nav>
+        </div>
       </div>
     </header>
   );

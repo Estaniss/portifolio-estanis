@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19 10" role="img" aria-label="United States flag">
+  <rect width="19" height="10" fill="#fff"/>
+  <path fill="#B22234" d="M0 0h19v.77H0zm0 1.54h19v.77H0zm0 1.54h19v.77H0zm0 1.54h19v.77H0zm0 1.54h19v.77H0zm0 1.54h19v.77H0zm0 1.54h19v.52H0z"/>
+  <rect width="7.6" height="5.38" fill="#3C3B6E"/>
+  <g fill="#fff">
+    <circle cx=".65" cy=".55" r=".18"/><circle cx="1.9" cy=".55" r=".18"/><circle cx="3.15" cy=".55" r=".18"/><circle cx="4.4" cy=".55" r=".18"/><circle cx="5.65" cy=".55" r=".18"/><circle cx="6.9" cy=".55" r=".18"/>
+    <circle cx="1.275" cy="1.1" r=".18"/><circle cx="2.525" cy="1.1" r=".18"/><circle cx="3.775" cy="1.1" r=".18"/><circle cx="5.025" cy="1.1" r=".18"/><circle cx="6.275" cy="1.1" r=".18"/>
+    <circle cx=".65" cy="1.65" r=".18"/><circle cx="1.9" cy="1.65" r=".18"/><circle cx="3.15" cy="1.65" r=".18"/><circle cx="4.4" cy="1.65" r=".18"/><circle cx="5.65" cy="1.65" r=".18"/><circle cx="6.9" cy="1.65" r=".18"/>
+    <circle cx="1.275" cy="2.2" r=".18"/><circle cx="2.525" cy="2.2" r=".18"/><circle cx="3.775" cy="2.2" r=".18"/><circle cx="5.025" cy="2.2" r=".18"/><circle cx="6.275" cy="2.2" r=".18"/>
+    <circle cx=".65" cy="2.75" r=".18"/><circle cx="1.9" cy="2.75" r=".18"/><circle cx="3.15" cy="2.75" r=".18"/><circle cx="4.4" cy="2.75" r=".18"/><circle cx="5.65" cy="2.75" r=".18"/><circle cx="6.9" cy="2.75" r=".18"/>
+    <circle cx="1.275" cy="3.3" r=".18"/><circle cx="2.525" cy="3.3" r=".18"/><circle cx="3.775" cy="3.3" r=".18"/><circle cx="5.025" cy="3.3" r=".18"/><circle cx="6.275" cy="3.3" r=".18"/>
+    <circle cx=".65" cy="3.85" r=".18"/><circle cx="1.9" cy="3.85" r=".18"/><circle cx="3.15" cy="3.85" r=".18"/><circle cx="4.4" cy="3.85" r=".18"/><circle cx="5.65" cy="3.85" r=".18"/><circle cx="6.9" cy="3.85" r=".18"/>
+    <circle cx="1.275" cy="4.4" r=".18"/><circle cx="2.525" cy="4.4" r=".18"/><circle cx="3.775" cy="4.4" r=".18"/><circle cx="5.025" cy="4.4" r=".18"/><circle cx="6.275" cy="4.4" r=".18"/>
+  </g>
+</svg>
